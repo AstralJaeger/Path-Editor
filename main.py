@@ -23,15 +23,7 @@ total_length_label: Label
 def main():
     # create window
     main_window = create_window()
-
-    global applications
-    applications = get_path_from_os()
     create_widgets(main_window)
-
-    not_found = 0
-    for i, application in enumerate(applications):
-        exists = path.exists(application)
-        not_found += (1 if not exists else 0)
 
     # Start tk loop
     main_window.mainloop()
@@ -43,6 +35,10 @@ def create_window() -> Tk:
 
 
 def add_entry():
+    pass
+
+
+def edit_entry():
     pass
 
 
@@ -130,16 +126,6 @@ def create_widgets(window: Tk) -> None:
     treeview.heading('path', text='Path')
     treeview.heading('filecount', text='Filecount')
 
-    for app in get_path_from_os():
-        exists = path.exists(app)
-        filecount = (get_filecount(app) if exists else 0)
-        system = 'windows/system32' in app
-        t = (app, filecount)
-        treeview.insert('', tk.END, values=t, tags=[
-            ('exists' if exists else 'nexists'),
-            ('sys32' if system else 'nsys32')
-        ])
-
     treeview.tag_configure('nexists', background='orange')
     treeview.tag_configure('sys32', foreground='gray')
 
@@ -169,30 +155,38 @@ def create_widgets(window: Tk) -> None:
     total_length_label = Label(text=f'Total Length: {get_path_length(applications)}')
     total_length_label.place(relx=0.05, rely=0.945, relwidth=0.75, relheight=0.05)
 
+    # -----
     # Add entry
     add_entry_btn = Button(text='Add', command=add_entry)
     add_entry_btn.place(relx=0.85, rely=0.05, relwidth=0.125, relheight=0.05)
 
+    # Edit entry
+    edit_entry_btn = Button(text='Edit', command=edit_entry)
+    edit_entry_btn.place(relx=0.85, rely=0.11, relwidth=0.125, relheight=0.05)
+
     # Remove entry
     remove_entry_btn = Button(text='Remove', command=remove_entry)
-    remove_entry_btn.place(relx=0.85, rely=0.11, relwidth=0.125, relheight=0.05)
+    remove_entry_btn.place(relx=0.85, rely=0.17, relwidth=0.125, relheight=0.05)
 
+    # -----
     # Move entry up
     up_btn = Button(text='Up', command=up_entry)
-    up_btn.place(relx=0.85, rely=0.17, relwidth=0.125, relheight=0.05)
+    up_btn.place(relx=0.85, rely=0.30, relwidth=0.125, relheight=0.05)
 
     # Move entry down
     down_btn = Button(text='Down', command=down_entry)
-    down_btn.place(relx=0.85, rely=0.23, relwidth=0.125, relheight=0.05)
+    down_btn.place(relx=0.85, rely=0.36, relwidth=0.125, relheight=0.05)
 
+    # -----
     # Reload path
     reload_btn = Button(text='Reload', command=reload_path)
-    reload_btn.place(relx=0.85, rely=0.45, relwidth=0.125, relheight=0.05)
+    reload_btn.place(relx=0.85, rely=0.49, relwidth=0.125, relheight=0.05)
 
     # Save path
     save_btn = Button(text='Save', command=save_path)
-    save_btn.place(relx=0.85, rely=0.51, relwidth=0.125, relheight=0.05)
-    update_statistics()
+    save_btn.place(relx=0.85, rely=0.55, relwidth=0.125, relheight=0.05)
+
+    reload_path()
 
 
 def item_selected(event):
