@@ -25,7 +25,7 @@ class PathModel:
     def get_path_from_os(self) -> Tuple[List[str], List[str]]:
         """
         Get PATH environment variables from the OS.
-        
+
         Returns:
             Tuple containing USER paths and SYSTEM paths
         """
@@ -70,32 +70,36 @@ class PathModel:
         If system_path is provided, admin privileges are required to set it.
         """
         success = True
-        
+
         if user_path is not None:
-            user_command = f'[Environment]::SetEnvironmentVariable("Path", \'{";".join(user_path)}\', [System.EnvironmentVariableTarget]::User)'
+            # Normalize paths before saving to ensure consistency with how they're loaded
+            normalized_user_path = [self.normalize_path(path) for path in user_path]
+            user_command = f'[Environment]::SetEnvironmentVariable("Path", \'{";".join(normalized_user_path)}\', [System.EnvironmentVariableTarget]::User)'
             print(f"Setting USER path: {user_command}")
             if not self.debug:
                 self.run_command(user_command)
 
         if system_path is not None:
             if self.is_admin():
-                system_command = f'[Environment]::SetEnvironmentVariable("Path", \'{";".join(system_path)}\', [System.EnvironmentVariableTarget]::Machine)'
+                # Normalize paths before saving to ensure consistency with how they're loaded
+                normalized_system_path = [self.normalize_path(path) for path in system_path]
+                system_command = f'[Environment]::SetEnvironmentVariable("Path", \'{";".join(normalized_system_path)}\', [System.EnvironmentVariableTarget]::Machine)'
                 print(f"Setting SYSTEM path: {system_command}")
                 if not self.debug:
                     self.run_command(system_command)
             else:
                 print("Admin privileges required to set SYSTEM path")
                 success = False
-                
+
         return success
 
     def run_command(self, command: str) -> Union[CompletedProcess, CompletedProcess[bytes]]:
         """
         Run a PowerShell command.
-        
+
         Args:
             command: PowerShell command to run
-            
+
         Returns:
             CompletedProcess object with the command result
         """
@@ -104,7 +108,7 @@ class PathModel:
     def is_admin(self) -> bool:
         """
         Check if the application is running with admin privileges.
-        
+
         Returns:
             True if running as admin, False otherwise
         """
@@ -116,10 +120,10 @@ class PathModel:
     def get_duplicate_count(self, paths: List[str]) -> int:
         """
         Count duplicates in a list of paths.
-        
+
         Args:
             paths: List of paths to check
-            
+
         Returns:
             Number of duplicate entries
         """
@@ -130,10 +134,10 @@ class PathModel:
     def get_filecount(self, directory: str) -> int:
         """
         Count files in a directory.
-        
+
         Args:
             directory: Directory to count files in
-            
+
         Returns:
             Number of files in the directory
         """
@@ -145,10 +149,10 @@ class PathModel:
     def get_path_length(self, paths: List[str]) -> int:
         """
         Calculate the total length of all paths.
-        
+
         Args:
             paths: List of paths
-            
+
         Returns:
             Total length of all paths
         """
@@ -157,10 +161,10 @@ class PathModel:
     def path_exists(self, path_str: str) -> bool:
         """
         Check if a path exists.
-        
+
         Args:
             path_str: Path to check
-            
+
         Returns:
             True if the path exists, False otherwise
         """
@@ -169,10 +173,10 @@ class PathModel:
     def normalize_path(self, path_str: str) -> str:
         """
         Normalize a path string.
-        
+
         Args:
             path_str: Path to normalize
-            
+
         Returns:
             Normalized path
         """
