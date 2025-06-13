@@ -2,9 +2,9 @@ import tkinter as tk
 import sys
 import os
 import ctypes
-from model import PathModel
-from view import PathView
-from controller import PathController
+from src.path_editor.model import PathModel
+from src.path_editor.view import PathView
+from src.path_editor.controller import PathController
 
 
 def main():

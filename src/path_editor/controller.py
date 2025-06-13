@@ -1,6 +1,4 @@
-import os
 import collections
-from typing import List, Dict, Callable, Any
 import tkinter as tk
 from tkinter import messagebox
 
