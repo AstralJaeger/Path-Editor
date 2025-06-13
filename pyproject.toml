@@ -1,0 +1,27 @@
+[project]
+name = "path-editor"
+version = "0.1.0"
+description = "A tool for managing Windows PATH environment variables"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pyinstaller>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "W"]
+ignore = []
+
+[tool.ruff.isort]
+known-first-party = ["model", "view", "controller"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = []
